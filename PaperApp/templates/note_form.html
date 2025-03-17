@@ -1,0 +1,64 @@
+{% extends 'base.html' %} {% block title %}{% if form.instance.id %}Edit Note{%
+else %}New Note{% endif %} | NoteKeeper{% endblock %} {% block content %}
+<div class="mb-4">
+  <a href="{% url 'note-list' %}" class="btn btn-outline-secondary">
+    <i class="bi bi-arrow-left"></i> Back to Notes
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h1 class="card-title mb-4">
+      {% if form.instance.id %}Edit Note{% else %}Create New Note{% endif %}
+    </h1>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="{{ form.title.id_for_label }}" class="form-label"
+          >Title</label
+        >
+        <input
+          type="text"
+          name="{{ form.title.name }}"
+          id="{{ form.title.id_for_label }}"
+          class="form-control {% if form.title.errors %}is-invalid{% endif %}"
+          value="{{ form.title.value|default:'' }}"
+          required
+        />
+        {% if form.title.errors %}
+        <div class="invalid-feedback">{{ form.title.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="mb-4">
+        <label for="{{ form.content.id_for_label }}" class="form-label"
+          >Content</label
+        >
+        <textarea
+          name="{{ form.content.name }}"
+          id="{{ form.content.id_for_label }}"
+          class="form-control {% if form.content.errors %}is-invalid{% endif %}"
+          style="min-height: 200px"
+          required
+        >
+{{ form.content.value|default:'' }}</textarea
+        >
+        {% if form.content.errors %}
+        <div class="invalid-feedback">{{ form.content.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <a href="{% url 'note-list' %}" class="btn btn-outline-secondary me-2"
+          >Cancel</a
+        >
+        <button type="submit" class="btn btn-primary">
+          {% if form.instance.id %}Update Note{% else %}Create Note{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
